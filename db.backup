@@ -1,0 +1,12 @@
+{
+  "todos": [
+    {
+      "id": 1,
+      "name": "Buy groceries",
+      "priority": "High",
+      "dueDate": "2023-03-25",
+      "text": "Milk, bread, eggs, and cheese",
+      "completed": false
+    }
+  ]
+}

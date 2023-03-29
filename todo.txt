@@ -1,0 +1,19 @@
+- add pagination
+- add some tests
+
+// sort todo by prio and dueDate
+
+const priorityMap: { [key: string]: number } = {
+High: 3,
+Normal: 2,
+Low: 1,
+};
+
+const sortedTodos = todos.sort((a, b) => {
+const priorityComparison =
+priorityMap[b.priority] - priorityMap[a.priority];
+if (priorityComparison !== 0) {
+return priorityComparison;
+}
+return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime();
+});

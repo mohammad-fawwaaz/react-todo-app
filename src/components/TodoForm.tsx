@@ -49,7 +49,12 @@ function TodoForm({
   };
 
   return (
-    <form onSubmit={handleSubmit(handleFormSubmit)} className="form-style">
+    <form
+      id="todo-form"
+      data-testid="todo-form"
+      onSubmit={handleSubmit(handleFormSubmit)}
+      className="form-style"
+    >
       <div className="mb-3">
         <label htmlFor="name" className="form-label">
           Name

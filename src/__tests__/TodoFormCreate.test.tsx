@@ -4,24 +4,14 @@ import axios from "axios";
 jest.mock("axios");
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 
-const todos = [
-  {
-    id: 1,
-    done: true,
-    name: "Test 1",
-    priority: "High",
-    due: "01/01/2024",
-    text: "Test text 1",
-  },
-  {
-    id: 2,
-    done: false,
-    name: "Test 2",
-    priority: "medium",
-    due: "01/01/2024",
-    text: "Test text 2",
-  },
-];
+const todos = {
+  id: 1,
+  done: true,
+  name: "Test 1",
+  priority: "High",
+  due: "01/01/2024",
+  text: "Test text 1",
+};
 
 beforeEach(() => {
   jest.resetAllMocks();
@@ -43,16 +33,16 @@ test("creates a new todo item", async () => {
   fireEvent.click(screen.getByText("Add Todo"));
 
   fireEvent.input(screen.getByLabelText("Name"), {
-    target: { value: "Test Todo" },
+    target: { value: "Test 1" },
   });
   fireEvent.input(screen.getByLabelText("Priority"), {
     target: { value: "High" },
   });
   fireEvent.input(screen.getByLabelText("Text"), {
-    target: { value: "This is a test todo item" },
+    target: { value: "Test text 1" },
   });
   fireEvent.input(screen.getByLabelText("Due Date"), {
-    target: { value: "2023-05-01" },
+    target: { value: "01/01/2024" },
   });
 
   fireEvent.click(screen.getByRole("button", { name: /submit/i }));
@@ -61,16 +51,16 @@ test("creates a new todo item", async () => {
   await screen.findByRole("dialog", { hidden: true });
 
   // Check that the new todo item is displayed in the list
-  expect(screen.getByText("Test Todo")).toBeInTheDocument();
+  expect(screen.getByText("Test 1")).toBeInTheDocument();
   expect(screen.getByText("High")).toBeInTheDocument();
-  expect(screen.getByText("This is a test todo item")).toBeInTheDocument();
-  expect(screen.getByText("May 1, 2023")).toBeInTheDocument();
+  expect(screen.getByText("Test text 1")).toBeInTheDocument();
+  expect(screen.getByText("01/01/2024")).toBeInTheDocument();
 
   // Check that the API is called with the correct data
   expect(mockedAxios.post).toHaveBeenCalledWith("/api/todos", {
     name: "Test Todo",
     priority: "High",
-    text: "This is a test todo item",
-    due: "2023-05-01",
+    text: "Test text 1",
+    due: "01/01/2024",
   });
 });

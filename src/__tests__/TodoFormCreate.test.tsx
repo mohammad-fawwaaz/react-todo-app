@@ -1,31 +1,32 @@
+import { rest } from "msw";
+import { setupServer } from "msw/node";
+
 import { render, fireEvent, screen } from "@testing-library/react";
 import HomePage from "../pages/HomePage";
-import axios from "axios";
-jest.mock("axios");
-const mockedAxios = axios as jest.Mocked<typeof axios>;
 
-const todos = {
-  id: 1,
-  done: true,
-  name: "Test 1",
-  priority: "High",
-  due: "01/01/2024",
-  text: "Test text 1",
-};
+const server = setupServer(
+  // Define a mock API endpoint
+  rest.post("/api/todos", (req, res, ctx) => {
+    const { name, priority, text, due } = req.body;
 
-beforeEach(() => {
-  jest.resetAllMocks();
-  mockedAxios.get.mockResolvedValue({
-    data: todos,
-    status: 200,
-    statusText: "Ok",
-  });
-  mockedAxios.post.mockResolvedValue({
-    data: todos,
-    status: 200,
-    statusText: "Ok",
-  });
-});
+    // Return a JSON response
+    return res(
+      ctx.status(200),
+      ctx.json({
+        id: 1,
+        done: false,
+        name,
+        priority,
+        due,
+        text,
+      })
+    );
+  })
+);
+
+beforeAll(() => server.listen());
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());
 
 test("creates a new todo item", async () => {
   render(<HomePage />);
@@ -33,16 +34,16 @@ test("creates a new todo item", async () => {
   fireEvent.click(screen.getByText("Add Todo"));
 
   fireEvent.input(screen.getByLabelText("Name"), {
-    target: { value: "Test 1" },
+    target: { value: "Test Todo" },
   });
   fireEvent.input(screen.getByLabelText("Priority"), {
     target: { value: "High" },
   });
   fireEvent.input(screen.getByLabelText("Text"), {
-    target: { value: "Test text 1" },
+    target: { value: "This is a test todo item" },
   });
   fireEvent.input(screen.getByLabelText("Due Date"), {
-    target: { value: "01/01/2024" },
+    target: { value: "01/01/2023" },
   });
 
   fireEvent.click(screen.getByRole("button", { name: /submit/i }));
@@ -51,16 +52,8 @@ test("creates a new todo item", async () => {
   await screen.findByRole("dialog", { hidden: true });
 
   // Check that the new todo item is displayed in the list
-  expect(screen.getByText("Test 1")).toBeInTheDocument();
+  expect(screen.getByText("Test Todo")).toBeInTheDocument();
   expect(screen.getByText("High")).toBeInTheDocument();
-  expect(screen.getByText("Test text 1")).toBeInTheDocument();
-  expect(screen.getByText("01/01/2024")).toBeInTheDocument();
-
-  // Check that the API is called with the correct data
-  expect(mockedAxios.post).toHaveBeenCalledWith("/api/todos", {
-    name: "Test Todo",
-    priority: "High",
-    text: "Test text 1",
-    due: "01/01/2024",
-  });
+  expect(screen.getByText("This is a test todo item")).toBeInTheDocument();
+  expect(screen.getByText("01/01/2023")).toBeInTheDocument();
 });

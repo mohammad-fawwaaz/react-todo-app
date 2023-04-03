@@ -35,7 +35,7 @@
       "priority": "Low",
       "text": "aabbccdd",
       "dueDate": "2023-04-09T00:00:00.000Z",
-      "done": false,
+      "done": true,
       "id": 6
     },
     {
@@ -44,7 +44,7 @@
       "text": "test test",
       "dueDate": "2023-04-09T00:00:00.000Z",
       "id": 7,
-      "done": true
+      "done": false
     }
   ]
 }

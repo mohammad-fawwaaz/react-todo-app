@@ -21,6 +21,5 @@
     "jsx": "react-jsx"
   },
   "include": [
-    "src"
-, "tests", "jest.config.js"  ]
+    "src", "__tests__", "jest.config.js"  ]
 }

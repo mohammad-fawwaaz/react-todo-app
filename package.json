@@ -32,7 +32,7 @@
     "start:react": "react-scripts start",
     "start:server": "json-server --watch db.json --port 3001",
     "build": "react-scripts build",
-    "test": "jest --coverage",
+    "test": "jest --config jest.config.js --coverage",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

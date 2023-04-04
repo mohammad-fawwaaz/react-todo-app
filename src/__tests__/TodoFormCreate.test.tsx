@@ -5,7 +5,6 @@ import { render, fireEvent, screen } from "@testing-library/react";
 import HomePage from "../pages/HomePage";
 
 const server = setupServer(
-  // Define a mock API endpoint
   rest.post("/api/todos", (req, res, ctx) => {
     const { name, priority, text, due } = req.body;
 
